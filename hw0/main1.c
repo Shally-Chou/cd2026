@@ -18,7 +18,7 @@ typedef struct Node {
 } Node;
 
 int main() {
-    // read code，open "main1.c"
+    // read code open "main1.c"
     FILE *file = fopen("main1.c", "r");
     if (file == NULL) {
         printf("Error: Cannot open file.\n");
@@ -53,7 +53,7 @@ int main() {
 
             char_map[ch] = newNode;
         } else {
-            // char exist，num+1
+            // char exist num+1
             char_map[ch]->count++;
         }
     }
