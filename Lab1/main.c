@@ -73,7 +73,6 @@ int main() {
         }
         current = current->next;
     }
-    printf(".....\n"); // Simulate the ending format on slide P.50
 
     // Free linked-list memory
     current = head;
