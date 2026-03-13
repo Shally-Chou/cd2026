@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-// def linked-list struct
+// Reuse HW0 structure, keep count to match slide P.49 requirement
 typedef struct Node {
     char character;
+    int count;
     struct Node *next;
 } Node;
 
 int main() {
-    // read itself
+    // Read its own source code
     FILE *file = fopen("main.c", "r");
     if (file == NULL) {
         printf("Error: Cannot open file.\n");
@@ -20,27 +21,44 @@ int main() {
     Node *tail = NULL;
     int ch;
 
-    // read Character Stream
+    // Reuse HW0 logic: read characters and filter duplicates
     while ((ch = fgetc(file)) != EOF) {
-        Node *newNode = (Node *)malloc(sizeof(Node));
-        newNode->character = (char)ch;
-        newNode->next = NULL;
+        Node *current = head;
+        int found = 0;
 
-        // new node put in the end of link-list
-        if (head == NULL) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail->next = newNode;
-            tail = newNode;
+        // Check if the character already exists in the linked-list
+        while (current != NULL) {
+            if (current->character == (char)ch) {
+                current->count++; // If it exists, increment the count
+                found = 1;
+                break;
+            }
+            current = current->next;
+        }
+
+        // If it is a new character, add a new node to the linked-list
+        if (!found) {
+            Node *newNode = (Node *)malloc(sizeof(Node));
+            newNode->character = (char)ch;
+            newNode->count = 1;
+            newNode->next = NULL;
+
+            if (head == NULL) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail->next = newNode;
+                tail = newNode;
+            }
         }
     }
 
     fclose(file);
 
+    // Output result: print characters from the linked-list based on Lab#1
     Node *current = head;
     while (current != NULL) {
-        // special char transmit
+        // Handle special characters for formatting
         if (current->character == '\n') {
             printf("\\n, ");
         } else if (current->character == '\r') {
@@ -50,12 +68,14 @@ int main() {
         } else if (current->character == ' ') {
             printf("space, ");
         } else {
+            // Normal output format, e.g., #, i, n, c, u, 
             printf("%c, ", current->character);
         }
         current = current->next;
     }
+    printf(".....\n"); // Simulate the ending format on slide P.50
 
-    // release linked-list mem
+    // Free linked-list memory
     current = head;
     while (current != NULL) {
         Node *temp = current;
